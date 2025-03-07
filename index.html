@@ -596,21 +596,6 @@
             border: 1px solid #ffecf2;
         }
 
-        /* NUEVO: Mensaje de no resultados para cada categoría */
-        .category-no-results {
-            text-align: center;
-            padding: 1.5rem;
-            color: #666;
-            font-size: 1.1rem;
-            display: none;
-            background-color: #fff;
-            border-radius: 10px;
-            margin: 1rem auto;
-            max-width: 100%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 1px solid #ffecf2;
-        }
-
         .nav-right {
             display: flex;
             align-items: center;
@@ -660,6 +645,11 @@
         /* AÑADIDO: Categorías para organizar productos */
         .product-category {
             margin-bottom: 3rem;
+        }
+        
+        /* NUEVO: Ocultar categorías completas */
+        .product-category.hidden {
+            display: none;
         }
         
         .category-title {
@@ -759,7 +749,7 @@
 
         <section class="products" id="products">
             <h2 class="section-title">Nuestros Juguetes</h2>
-            <!-- AÑADIDO: Mensaje de no resultados para la búsqueda general -->
+            <!-- MODIFICADO: Mensaje de no resultados para la búsqueda general -->
             <div class="no-results" id="noResults">
                 No se encontraron productos que coincidan con tu búsqueda.
             </div>
@@ -768,10 +758,6 @@
                 <!-- AÑADIDO: Categoría de Muñecas y Figuras -->
                 <div class="product-category" id="dolls">
                     <h3 class="category-title">Muñecas y Figuras</h3>
-                    <!-- NUEVO: Mensaje de no resultados para esta categoría -->
-                    <div class="category-no-results" id="dollsNoResults">
-                        No se encontraron muñecas o figuras que coincidan con tu búsqueda.
-                    </div>
                     <div class="products-grid">
                         <!-- Producto: Muñeca de trapo púrpura -->
                         <article class="product-item">
@@ -804,8 +790,6 @@
                                 </div>
                                 <div class="product-price">2500 CUP</div>
                                 <a href="https://wa.me/+5358850138?text=Me%20interesa%20la%20Muñeca%20Princesa%20Luminosa" class="order-button">Haga su pedido</a>
-                            </div>
-                          class="order-button">Haga su pedido</a>
                             </div>
                         </article>
 
@@ -899,10 +883,6 @@
                 <!-- AÑADIDO: Categoría de Arte y Papelería -->
                 <div class="product-category" id="art">
                     <h3 class="category-title">Arte y Papelería</h3>
-                    <!-- NUEVO: Mensaje de no resultados para esta categoría -->
-                    <div class="category-no-results" id="artNoResults">
-                        No se encontraron productos de arte o papelería que coincidan con tu búsqueda.
-                    </div>
                     <div class="products-grid">
                         <!-- Producto: BTS Rolling Crayon -->
                         <article class="product-item">
@@ -994,10 +974,6 @@
                 <!-- AÑADIDO: Categoría de Juguetes Interactivos -->
                 <div class="product-category" id="interactive">
                     <h3 class="category-title">Juguetes Interactivos</h3>
-                    <!-- NUEVO: Mensaje de no resultados para esta categoría -->
-                    <div class="category-no-results" id="interactiveNoResults">
-                        No se encontraron juguetes interactivos que coincidan con tu búsqueda.
-                    </div>
                     <div class="products-grid">
                         <!-- Producto: Perrito Luminoso -->
                         <article class="product-item">
@@ -1055,10 +1031,6 @@
                 <!-- AÑADIDO: Categoría de Juguetes Sensoriales y Creativos -->
                 <div class="product-category" id="sensory">
                     <h3 class="category-title">Juguetes Sensoriales y Creativos</h3>
-                    <!-- NUEVO: Mensaje de no resultados para esta categoría -->
-                    <div class="category-no-results" id="sensoryNoResults">
-                        No se encontraron juguetes sensoriales o creativos que coincidan con tu búsqueda.
-                    </div>
                     <div class="products-grid">
                         <!-- Producto: Slime Luminoso -->
                         <article class="product-item">
@@ -1133,10 +1105,6 @@
                 <!-- AÑADIDO: Categoría de Accesorios y Otros -->
                 <div class="product-category" id="accessories">
                     <h3 class="category-title">Accesorios y Otros</h3>
-                    <!-- NUEVO: Mensaje de no resultados para esta categoría -->
-                    <div class="category-no-results" id="accessoriesNoResults">
-                        No se encontraron accesorios que coincidan con tu búsqueda.
-                    </div>
                     <div class="products-grid">
                         <!-- Producto: Carteritas Kawaii -->
                         <article class="product-item">
@@ -1222,7 +1190,7 @@
         const closeBtn = document.querySelector('.close-btn');
         const scrollTop = document.querySelector('.scroll-top');
         
-        // NUEVO: Variables para el buscador
+        // Variables para el buscador
         const searchIcon = document.getElementById('searchIcon');
         const searchContainer = document.getElementById('searchContainer');
         const searchInput = document.getElementById('searchInput');
@@ -1230,15 +1198,7 @@
         const productsGrid = document.getElementById('productsGrid');
         const productItems = document.querySelectorAll('.product-item');
         const noResults = document.getElementById('noResults');
-        
-        // NUEVO: Referencias a los mensajes de no resultados por categoría
-        const categoryNoResults = {
-            dolls: document.getElementById('dollsNoResults'),
-            art: document.getElementById('artNoResults'),
-            interactive: document.getElementById('interactiveNoResults'),
-            sensory: document.getElementById('sensoryNoResults'),
-            accessories: document.getElementById('accessoriesNoResults')
-        };
+        const productCategories = document.querySelectorAll('.product-category');
 
         window.addEventListener('scroll', function(){
             nav.classList.toggle('active', window.scrollY > 0);
@@ -1269,7 +1229,7 @@
                 menu.classList.remove('active');
             }
             
-            // NUEVO: Cerrar buscador al hacer clic fuera
+            // Cerrar buscador al hacer clic fuera
             if (!searchContainer.contains(event.target) && !searchIcon.contains(event.target) && searchContainer.classList.contains('active')) {
                 searchContainer.classList.remove('active');
             }
@@ -1294,7 +1254,7 @@
         window.addEventListener('resize', updateWavePath);
         window.addEventListener('load', updateWavePath);
         
-        // MODIFICADO: Funcionalidad mejorada del buscador
+        // Funcionalidad del buscador
         searchIcon.addEventListener('click', () => {
             searchContainer.classList.toggle('active');
             if (searchContainer.classList.contains('active')) {
@@ -1302,9 +1262,10 @@
             }
         });
         
-        // NUEVO: Función para filtrar productos por categoría
-        function filterProductsByCategory(category, searchTerm) {
-            const categoryProducts = document.querySelectorAll(`#${category} .product-item`);
+        // Función para filtrar productos por categoría
+        function filterProductsByCategory(category) {
+            const categoryProducts = category.querySelectorAll('.product-item');
+            const searchTerm = searchInput.value.toLowerCase().trim();
             let foundInCategory = false;
             
             categoryProducts.forEach(item => {
@@ -1320,9 +1281,11 @@
                 }
             });
             
-            // Mostrar u ocultar mensaje de no resultados para esta categoría
-            if (categoryNoResults[category]) {
-                categoryNoResults[category].style.display = foundInCategory ? 'none' : 'block';
+            // Mostrar u ocultar la categoría completa
+            if (foundInCategory) {
+                category.classList.remove('hidden');
+            } else {
+                category.classList.add('hidden');
             }
             
             return foundInCategory;
@@ -1335,25 +1298,22 @@
             // Ocultar mensaje general de no resultados inicialmente
             noResults.style.display = 'none';
             
-            // Si no hay término de búsqueda, mostrar todos los productos
+            // Si no hay término de búsqueda, mostrar todos los productos y categorías
             if (searchTerm === '') {
                 productItems.forEach(item => {
                     item.classList.remove('hidden');
                 });
                 
-                // Ocultar todos los mensajes de no resultados por categoría
-                Object.values(categoryNoResults).forEach(msg => {
-                    msg.style.display = 'none';
+                productCategories.forEach(category => {
+                    category.classList.remove('hidden');
                 });
                 
                 return;
             }
             
             // Filtrar por cada categoría
-            const categories = ['dolls', 'art', 'interactive', 'sensory', 'accessories'];
-            
-            categories.forEach(category => {
-                const foundInCategory = filterProductsByCategory(category, searchTerm);
+            productCategories.forEach(category => {
+                const foundInCategory = filterProductsByCategory(category);
                 if (foundInCategory) {
                     foundProducts = true;
                 }
@@ -1367,7 +1327,7 @@
         
         searchInput.addEventListener('input', filterProducts);
         
-        // MODIFICADO: Al hacer clic en el botón de búsqueda, desplazar a la sección de juguetes
+        // Al hacer clic en el botón de búsqueda, desplazar a la sección de juguetes
         searchBtn.addEventListener('click', () => {
             filterProducts();
             
